@@ -34,7 +34,7 @@ router.delete('/:id', (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validatePostId, (req, res) => {
   const id = req.params.id;
   const body = req.body;
   Posts.update(id, body)
@@ -49,7 +49,22 @@ router.put('/:id', (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
-  // do your magic!
+  const {id} = req.params;
+
+  Posts.getById(id)
+  .then(post => {
+    if (post) {
+      req.post = post;
+      next();
+    } else {
+      res.status(404).json({message: 'Post Id is invalid'})
+    }
+  })
+  .catch(error => {
+    error.code = 500;
+    error.message = 'database error';
+    next(error);
+  })
 }
 
 module.exports = router;
