@@ -1,11 +1,10 @@
 const express = require('express');
 const userRouter = require('./users/userRouter.js');
 const postRouter = require('./posts/postRouter.js');
-const helmet = require ('helmet');
 
 const server = express();
 server.use(express.json());
-server.use(helmet());
+
 server.use(logger);
 
 server.use('/api/users', userRouter);
@@ -23,9 +22,9 @@ function logger(req, res, next) {
   next();
 }
 
-server.listen(4000, () => {
-  console.log('\n* Server Running on http://localhost:4000 *\n');
-});
+// server.listen(4000, () => {
+//   console.log('\n* Server Running on http://localhost:4000 *\n');
+// });
 
 module.exports = server;
 
